@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 21.6b0
+    hooks:
+    - id: black
+      language_version: python3
+      exclude: versioneer\.py|src/aeolus/_version\.py$
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+    - id: flake8
+      language_version: python3
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1  # Use the ref you want to point at
+    hooks:
+    - id: check-json
+    - id: check-yaml
+    - id: fix-encoding-pragma
+    - id: trailing-whitespace
+    - id: name-tests-test
+      args: ['--django']
