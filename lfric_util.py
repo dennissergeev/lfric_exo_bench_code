@@ -69,3 +69,18 @@ def add_equally_spaced_height_coord(cube, field, filename, model_top_height):
         cube.add_aux_coord(hgt_coord, data_dims=cube.coord_dims(lev_coord))
 
     return cube
+
+
+def clean_attrs(cube, field, filename):
+    """
+    Callback function for `iris.load` specifically for LFRic data to clean up attributes.
+
+    Needed for concatenating cubes.
+    """
+    try:
+        cube.attributes.pop("timeStamp")
+        cube.attributes.pop("uuid")
+    except KeyError:
+        pass
+
+    return cube
