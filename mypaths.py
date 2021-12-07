@@ -3,13 +3,25 @@
 from pathlib import Path
 
 # Top-level directory containing code and data (one level up)
-topdir = Path(__file__).absolute().parent.parent
-
-# Modelling results
-datadir = topdir.parent / "modelling" / "um" / "results"
-
-sadir = datadir / "sa"  # standalone suites directory
+top = Path(__file__).absolute().parent.parent
 
 # Plotting output
-plotdir = topdir / "plots"
-plotdir.mkdir(parents=True, exist_ok=True)
+plot = top / "plots"
+plot.mkdir(parents=True, exist_ok=True)
+
+# Constants
+const = Path(__file__).absolute().parent / "const"
+
+# UM 
+# Modelling results
+results_um = top.parent / "modelling" / "um" / "results" / "sa"
+# Start dumps
+start_dumps_um = top.parent / "modelling" / "um" / "start_dumps"
+# Vertical levels
+vert_um = top.parent / "modelling" / "um" / "vert"
+
+# LFRic
+# Modelling results
+results_lfric = top.parent / "modelling" / "lfric" / "results"
+# Start dumps
+start_dumps_lfric = top.parent / "modelling" / "lfric" / "start_dumps"
