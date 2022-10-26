@@ -6,38 +6,7 @@ import iris.util
 
 import numpy as np
 
-
-def fix_time_coord(cube, field, filename):
-    """
-    Callback function for `iris.load` specifically for UGRID data.
-
-    All field variables should have time as a coord, and mesh variables
-    will not have a time coord. So ignore anything that doesn't have a
-    time coord. Note that mesh info will still be loaded in the
-    coordinate part of the cube.
-
-    Make sure that time coordinate is correct type, seems to always be
-    loaded as a basic AuxCoord rather than a Scalar or DimCoord.
-    """
-
-    # Ignore cubes with no time coordinate
-    if len(cube.coords("time")) == 0:
-        raise iris.exceptions.IgnoreCubeException
-
-    # Else, fix metadata in variables
-    else:
-
-        tcoord = cube.coord("time")
-
-        # If only 1 time coordinate value, downgrade AuxCoord to Scalar
-        if tcoord.points.size == 1:
-            cube = cube.extract(iris.Constraint(time=tcoord.cell(0)))
-        # Else, upgrade AuxCoord to DimCoord
-        else:
-            if isinstance(tcoord, iris.coords.AuxCoord):
-                iris.util.promote_aux_coord_to_dim_coord(cube, tcoord)
-
-    return cube
+from aeolus.model import um
 
 
 def add_equally_spaced_height_coord(cube, field, filename, model_top_height):
@@ -84,3 +53,52 @@ def clean_attrs(cube, field, filename):
         pass
 
     return cube
+
+
+def fix_time_coord(cube, field, filename):
+    """
+    Callback function for `iris.load` specifically for UGRID data.
+
+    All field variables should have time as a coord, and mesh variables
+    will not have a time coord. So ignore anything that doesn't have a
+    time coord. Note that mesh info will still be loaded in the
+    coordinate part of the cube.
+
+    Make sure that time coordinate is correct type, seems to always be
+    loaded as a basic AuxCoord rather than a Scalar or DimCoord.
+    """
+
+    # Ignore cubes with no time coordinate
+    if len(cube.coords("time")) == 0:
+        raise iris.exceptions.IgnoreCubeException
+
+    # Else, fix metadata in variables
+    else:
+
+        tcoord = cube.coord("time")
+
+        # If only 1 time coordinate value, downgrade AuxCoord to Scalar
+        if tcoord.points.size == 1:
+            cube = cube.extract(iris.Constraint(time=tcoord.cell(0)))
+        # Else, upgrade AuxCoord to DimCoord
+        else:
+            if isinstance(tcoord, iris.coords.AuxCoord):
+                iris.util.promote_aux_coord_to_dim_coord(cube, tcoord)
+
+    return cube
+
+
+def ugrid_spatial_mean(cube, model=um):
+    cube_copy = cube.copy()
+    tmp_coord = iris.coords.AuxCoord(
+        points=np.arange(cube.coord(model.x).shape[0]), long_name="mesh_coordinates"
+    )
+
+    cube_copy.add_aux_coord(tmp_coord, data_dims=cube.coord_dims(model.x))
+
+    cube_copy.remove_coord(model.x)
+    cube_copy.remove_coord(model.y)
+
+    cube_mean = cube_copy.collapsed(tmp_coord.name(), iris.analysis.MEAN)
+    cube_mean.remove_coord(tmp_coord)
+    return cube_mean
