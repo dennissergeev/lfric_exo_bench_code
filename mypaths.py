@@ -14,7 +14,7 @@ const = Path(__file__).absolute().parent / "const"
 
 # UM 
 # Modelling results
-results_um = top.parent / "modelling" / "um" / "results" / "sa"
+results_um = top.parent / "modelling" / "um" / "results"
 # Start dumps
 start_dumps_um = top.parent / "modelling" / "um" / "start_dumps"
 # Vertical levels
