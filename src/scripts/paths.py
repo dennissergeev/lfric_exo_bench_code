@@ -25,7 +25,9 @@ const = scripts / "const"
 data = root.parent / "data"
 
 # UM output
-results_um = data / "raw" / "um"
+results_raw_um = data / "raw" / "um"
+results_proc_um = data / "proc" / "um"
 
 # LFRic output
-results_lfric = data / "raw" / "lfric"
+results_raw_lfric = data / "raw" / "lfric"
+results_proc_lfric = data / "proc" / "lfric"
