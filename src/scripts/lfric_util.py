@@ -88,7 +88,7 @@ def fix_time_coord(cube, field, filename):
     return cube
 
 
-def ugrid_spatial_mean(cube, model=um):
+def ugrid_spatial(cube, aggr, model=um):
     cube_copy = cube.copy()
     tmp_coord = iris.coords.AuxCoord(
         points=np.arange(cube.coord(model.x).shape[0]), long_name="mesh_coordinates"
@@ -99,6 +99,10 @@ def ugrid_spatial_mean(cube, model=um):
     cube_copy.remove_coord(model.x)
     cube_copy.remove_coord(model.y)
 
-    cube_mean = cube_copy.collapsed(tmp_coord.name(), iris.analysis.MEAN)
-    cube_mean.remove_coord(tmp_coord)
-    return cube_mean
+    cube_aggr = cube_copy.collapsed(tmp_coord.name(), getattr(iris.analysis, aggr.upper()))
+    cube_aggr.remove_coord(tmp_coord)
+    return cube_aggr
+
+
+def ugrid_spatial_mean(cube, model=um):
+    return ugrid_spatial(cube, "mean", model=model)
