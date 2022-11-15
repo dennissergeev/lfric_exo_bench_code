@@ -21,7 +21,7 @@ figure.facecolor : (1, 1, 1, 1)
 #savefig.dpi         : figure   # figure dots per inch or 'figure'
 #savefig.facecolor   : white    # figure facecolor when saving
 #savefig.edgecolor   : white    # figure edgecolor when saving
-savefig.format      : pdf      # png, ps, pdf, svg
+savefig.format      : png      # png, ps, pdf, svg
 savefig.bbox        : tight    # 'tight' or 'standard'.
                                 # 'tight' is incompatible with pipe-based animation
                                 # backends but will workd with temporary file based ones:
