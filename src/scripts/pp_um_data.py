@@ -35,7 +35,7 @@ def parse_args(args=None):
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         epilog=f"""Usage:
-./{SCRIPT} -p trap1e -l trap1e -i ~/path/to/inp/dir/ -o ~/path/to/out/dir --timestep 1200
+./{SCRIPT} -p trap1e -l trap1e -i ~/path/to/inp/dir/ -o ~/path/to/out/dir
 """,
     )
 
@@ -48,8 +48,12 @@ def parse_args(args=None):
     #     default=False,
     #     help="Read data from a rose suite",
     # )
-    ap.add_argument("-l", "--label", type=str, required=True, help="Simulation label")
-    ap.add_argument("-p", "--planet", type=str, required=True, help="Planet configuration")
+    ap.add_argument(
+        "-l", "--label", type=str, required=True, help="Simulation label"
+    )
+    ap.add_argument(
+        "-p", "--planet", type=str, required=True, help="Planet configuration"
+    )
     ap.add_argument(
         "-s",
         "--startday",
@@ -68,7 +72,7 @@ def parse_args(args=None):
         "--timestep",
         type=int,
         default=GLM_MODEL_TIMESTEP,
-        help="Model time step in seconds (for converting increments to common units)",
+        help="Time step in seconds (for converting increments to SI units)",
     )
     ap.add_argument(
         "--letter",
@@ -92,7 +96,7 @@ def parse_args(args=None):
         "--extract_inst",
         action="store_true",
         default=False,
-        help="Extract instantaneous fields (if present), otherwise extract mean",
+        help="Extract instantaneous fields (if exist), otherwise extract mean",
     )
     ap.add_argument(
         "--no_regrid_multi_lev",
