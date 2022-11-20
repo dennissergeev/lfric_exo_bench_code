@@ -17,6 +17,7 @@ from iris.experimental.ugrid import PARSE_UGRID_ON_LOAD
 from aeolus.const import add_planet_conf_to_cubes, init_const
 from aeolus.coord import get_cube_rel_days
 from aeolus.io import save_cubelist, create_dummy_cube
+from aeolus.subset import unique_cubes
 import paths
 
 from pouch.log import create_logger
@@ -112,13 +113,30 @@ def main(args=None):
         [
             "rho",
             "theta",
+            "pmsl",
+            "temperature",
+            "tot_col_int_energy",
+            "tot_col_dry_air_mass",
+            "tot_col_pot_energy",
             "divergence",
-            "u_in_w2h",
+            # "u_in_w2h",
+            "u_in_w3",
             "exner",
-            "v_in_w2h",
+            "exner_in_wth",
+            "grid_surface_temperature",
+            # "v_in_w2h",
+            "v_in_w3",
+            "pressure_in_wth",
             "w_in_wth",
         ]
     )
+    cubes_to_regrid = unique_cubes(cubes_to_regrid)
+    if len(w_cubes := cubes_to_regrid.extract("w_in_wth")) == 2:
+        cubes_to_regrid.remove(w_cubes[-1])
+    for cube in cubes_to_regrid:
+        if cube.units == "ms-1":
+            cube.units = "m s-1"
+    # L.info(f"{cubes_to_regrid=}")
     # Create a dummy cube with a target grid
     tgt_cube = create_dummy_cube(nlat=90, nlon=144, pm180=True)
     # Regrid all cubes
@@ -126,10 +144,7 @@ def main(args=None):
     const = init_const(planet, directory=paths.const)
     add_planet_conf_to_cubes(cl_proc, const=const)
 
-    if args.extract_inst:
-        time_prof = "inst"
-    else:
-        time_prof = "mean"
+    time_prof = "inst"
     # Write the data to a netCDF file
     gl_attrs = {
         "name": label,
