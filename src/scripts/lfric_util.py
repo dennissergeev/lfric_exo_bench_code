@@ -171,6 +171,7 @@ def _regrid_cubes_on_edges(src_cube, tgt_cube, method="auto"):
     dim_order = [*range(src_cube.ndim + 1)]
     dim_order[0], dim_order[1] = 1, 0
     result.transpose(dim_order)
+    result.metadata = src_cube.metadata
     return result
 
 
@@ -178,6 +179,7 @@ def simple_regrid_lfric(
     cube_list, tgt_cube, ref_cube_constr="air_potential_temperature"
 ):
     """Quick&dirty regridding of LFRic data to a common height/lat/lon grid."""
+    # Horizontal regridding
     result_h = iris.cube.CubeList()
     ref_cube = cube_list.extract_cube(ref_cube_constr)
     regridder = MeshToGridESMFRegridder(
@@ -189,6 +191,7 @@ def simple_regrid_lfric(
         else:
             cube_reg = regridder(cube)
         result_h.append(cube_reg)
+    # Vertical interpolation
     result_v = iris.cube.CubeList()
     tgt_points = ("level_height", ref_cube.coord("level_height").points)
     for cube in result_h:
