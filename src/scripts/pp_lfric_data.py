@@ -49,6 +49,13 @@ def parse_args(args=None):
         "-p", "--planet", type=str, required=True, help="Planet configuration"
     )
     ap.add_argument(
+        "-c",
+        "--cnum",
+        type=str,
+        help="Cubed Sphere Mesh Number",
+        default="C48",
+    )
+    ap.add_argument(
         "--ref_cube",
         type=str,
         default="air_potential_temperature",
@@ -69,6 +76,9 @@ def main(args=None):
     label = args.label
     L.info(f"{label=}")
 
+    # Cubed Sphere Mesh C Number
+    c_num = args.cnum
+
     # Input directory
     # inpdir = mypaths.sadir / label
     inpdir = Path(args.inpdir)
@@ -81,7 +91,7 @@ def main(args=None):
 
     # Make a list of files matching the file mask and the start day threshold
     fnames = sorted(
-        inpdir.glob("*/*/lfric_diag.nc"),
+        inpdir.glob(f"*/*{c_num}*/lfric_diag.nc"),
         key=lambda x: int(x.parent.parent.name),
     )
     if len(fnames) == 0:
