@@ -43,3 +43,21 @@ def timeseries_2d(cube, ax=None, model=um, **kw_plt):
     fig.colorbar(mappable, ax=ax)
     if newax:
         return ax
+
+
+def map_scatter(cube, ax=None, **kw_scatter):
+    newax = False
+    if ax is None:
+        ax = plt.axes()
+        newax = True
+    fig = ax.figure
+    # This doesn't work because lons and lats in the mesh are of size N+2
+    # while the data array is of size N
+    # lons, lats = cube.mesh.node_coords
+    # lons, lats = lons.points, lats.points
+    lons = cube.coord("longitude").points
+    lats = cube.coord("latitude").points
+    mappable = ax.scatter(lons, lats, c=cube.data, **kw_scatter)
+    fig.colorbar(mappable, ax=ax)
+    if newax:
+        return ax
