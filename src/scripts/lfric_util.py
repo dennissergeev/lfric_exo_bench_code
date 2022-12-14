@@ -6,10 +6,56 @@ import iris.util
 
 import numpy as np
 
+from aeolus.io import load_vert_lev
 from aeolus.model import um
 from esmf_regrid.experimental.unstructured_scheme import (
     MeshToGridESMFRegridder,
 )
+
+
+def add_um_height_coord(cube, field, filename, path_to_levels_file):
+    """
+    Callback for `iris.load` specifically for LFRic data with vertical coord.
+
+    Adds a vertical coordinate of level heights from a UM vertical levels file.
+
+    Parameters
+    ----------
+    path_to_levels_file: Path-like
+        Path to the vertical levels file.
+
+    Examples
+    --------
+    >>> from functools import partial
+    >>> iris.load(
+        filename,
+        callback=partial(
+            add_um_height_coord,
+            path_to_levels_file=Path('/path/to/vertlevs_L38_29t_9s_40km')
+        )
+    )
+    """
+    lev_coords = [
+        i.name() for i in cube.dim_coords if i.name().endswith("_levels")
+    ]
+    if len(lev_coords) == 1:
+        thlev = load_vert_lev(path_to_levels_file, lev_type="theta")
+        rholev = load_vert_lev(path_to_levels_file, lev_type="rho")
+        lev_coord = cube.coord(lev_coords[0])
+        if "full" in lev_coord.name().lower():
+            points = thlev
+        else:
+            points = rholev
+        hgt_coord = iris.coords.AuxCoord(
+            points,
+            long_name="level_height",
+            units="m",
+            attributes=dict(positive="up"),
+        )
+        hgt_coord.guess_bounds()
+        cube.add_aux_coord(hgt_coord, data_dims=cube.coord_dims(lev_coord))
+
+    return cube
 
 
 def add_equally_spaced_height_coord(cube, field, filename, model_top_height):

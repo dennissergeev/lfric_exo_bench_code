@@ -22,7 +22,11 @@ import paths
 
 from pouch.log import create_logger
 
-from lfric_util import add_equally_spaced_height_coord, simple_regrid_lfric
+from lfric_util import (
+    add_equally_spaced_height_coord,
+    simple_regrid_lfric,
+    add_um_height_coord,
+)
 
 # Global definitions and styles
 warnings.filterwarnings("ignore")
@@ -61,6 +65,12 @@ def parse_args(args=None):
         default="air_potential_temperature",
         help="Reference cube, to which coordinates all data will be regridded",
     )
+    ap.add_argument(
+        "--level_height",
+        type=str,
+        default="uniform",
+        help="Type of the vertical level height coordinate",
+    )
     return ap.parse_args(args)
 
 
@@ -76,8 +86,21 @@ def main(args=None):
     label = args.label
     L.info(f"{label=}")
 
-    # Cubed Sphere Mesh C Number
+    # Cubed sphere mesh C number
     c_num = args.cnum
+
+    # Height coordinate
+    if args.level_height == "uniform":
+        add_levs = partial(
+            add_equally_spaced_height_coord, model_top_height=32_000
+        )
+    elif args.level_height == "um_L38_29t_9s_40km":
+        add_levs = partial(
+            add_um_height_coord,
+            path_to_levels_file=paths.vert / "vertlevs_L38_29t_9s_40km",
+        )
+    else:
+        raise ValueError(f"level_height={args.level_height} is not valid.")
 
     # Input directory
     # inpdir = mypaths.sadir / label
@@ -102,9 +125,7 @@ def main(args=None):
     with PARSE_UGRID_ON_LOAD.context():
         cl_raw = iris.load(
             fnames,
-            callback=partial(
-                add_equally_spaced_height_coord, model_top_height=32_000
-            ),
+            callback=add_levs,
         )
 
         for cube in cl_raw:
@@ -121,23 +142,26 @@ def main(args=None):
     # L.info(f"{cl_raw=}")
     cubes_to_regrid = cl_raw.extract(
         [
-            "rho",
-            "theta",
+            # "rho",
+            # "theta",
             "pmsl",
             "temperature",
-            "tot_col_int_energy",
-            "tot_col_dry_air_mass",
-            "tot_col_pot_energy",
-            "divergence",
+            # "tot_col_int_energy",
+            # "tot_col_dry_air_mass",
+            # "tot_col_pot_energy",
+            # "divergence",
             # "u_in_w2h",
-            "u_in_w3",
-            "exner",
-            "exner_in_wth",
-            "grid_surface_temperature",
             # "v_in_w2h",
+            "u_in_w3",
             "v_in_w3",
-            "pressure_in_wth",
             "w_in_wth",
+            # "exner",
+            # "exner_in_wth",
+            "grid_surface_temperature",
+            "pressure_in_wth",
+            "sw_direct_toa",
+            "sw_up_toa",
+            "lw_up_toa",
         ]
     )
     cubes_to_regrid = unique_cubes(cubes_to_regrid)
@@ -150,7 +174,9 @@ def main(args=None):
     # Create a dummy cube with a target grid
     tgt_cube = create_dummy_cube(nlat=90, nlon=144, pm180=True)
     # Regrid all cubes
-    cl_proc = simple_regrid_lfric(cubes_to_regrid, tgt_cube=tgt_cube)
+    cl_proc = simple_regrid_lfric(
+        cubes_to_regrid, tgt_cube=tgt_cube, ref_cube_constr=args.ref_cube
+    )
     const = init_const(planet, directory=paths.const)
     add_planet_conf_to_cubes(cl_proc, const=const)
 

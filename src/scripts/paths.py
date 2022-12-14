@@ -31,3 +31,6 @@ results_proc_um = data / "proc" / "um"
 # LFRic output
 results_raw_lfric = data / "raw" / "lfric"
 results_proc_lfric = data / "proc" / "lfric"
+
+# Vertical levels
+vert = data / "vert"
