@@ -1,5 +1,7 @@
 # Project-specific
+src/figures/drafts
 PET*
+xios*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -79,6 +81,8 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+Untitled*.ipynb
+untitled*
 
 # IPython
 profile_default/
