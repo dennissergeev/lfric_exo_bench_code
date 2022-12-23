@@ -61,3 +61,14 @@ def map_scatter(cube, ax=None, **kw_scatter):
     fig.colorbar(mappable, ax=ax)
     if newax:
         return ax
+
+
+def make_list_2d(list_x, list_y, transpose=False):
+    if transpose:
+        return [[f"{key_y}-{key_x}" for key_x in list_x] for key_y in list_y]
+    else:
+        return [[f"{key_x}-{key_y}" for key_x in list_x] for key_y in list_y]
+
+
+def capitalise(s):
+    return " ".join([i.capitalize() for i in s.split("_")])
