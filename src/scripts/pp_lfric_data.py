@@ -9,10 +9,6 @@ from pathlib import Path
 from time import time
 import warnings
 
-# Scientific library
-import iris
-from iris.experimental.ugrid import PARSE_UGRID_ON_LOAD
-
 # My packages and local scripts
 from aeolus.const import add_planet_conf_to_cubes, init_const
 from aeolus.coord import get_cube_rel_days
@@ -24,8 +20,9 @@ from pouch.log import create_logger
 
 from lfric_util import (
     add_equally_spaced_height_coord,
-    simple_regrid_lfric,
     add_um_height_coord,
+    load_lfric_raw,
+    simple_regrid_lfric,
 )
 
 # Global definitions and styles
@@ -122,46 +119,40 @@ def main(args=None):
         return
     L.info(f"fnames({len(fnames)}) = {fnames[0]} ... {fnames[-1]}")
 
-    with PARSE_UGRID_ON_LOAD.context():
-        cl_raw = iris.load(
-            fnames,
-            callback=add_levs,
-        )
-
-        for cube in cl_raw:
-            try:
-                cube.attributes.pop("timeStamp")
-                cube.attributes.pop("uuid")
-            except KeyError:
-                pass
-        cl_raw = cl_raw.concatenate(check_aux_coords=False)
-
-        if len(cl_raw) == 0:
-            L.critical("Files are empty!")
-            return
+    cl_raw = load_lfric_raw(fnames, callback=add_levs)
+    if len(cl_raw) == 0:
+        L.critical("Files are empty!")
+        return
     # L.info(f"{cl_raw=}")
     cubes_to_regrid = cl_raw.extract(
         [
             # "rho",
-            # "theta",
-            "pmsl",
-            "temperature",
-            # "tot_col_int_energy",
-            # "tot_col_dry_air_mass",
-            # "tot_col_pot_energy",
-            # "divergence",
-            # "u_in_w2h",
-            # "v_in_w2h",
-            "u_in_w3",
-            "v_in_w3",
-            "w_in_wth",
             # "exner",
             # "exner_in_wth",
+            "cloud_amount_maxrnd",
+            "divergence",
             "grid_surface_temperature",
+            "lw_down_surf",
+            "lw_up_surf",
+            "lw_up_toa",
             "pressure_in_wth",
             "sw_direct_toa",
+            "sw_down_surf",
+            "sw_up_surf",
             "sw_up_toa",
-            "lw_up_toa",
+            "temperature",
+            "theta",
+            "tot_col_int_energy",
+            "tot_col_dry_air_mass",
+            "tot_col_pot_energy",
+            "tot_col_m_ci",
+            "tot_col_m_cl",
+            "tot_col_m_v",
+            "u_in_w3",
+            "v_in_w3",
+            "w_in_wth"
+            # "u_in_w2h",
+            # "v_in_w2h",
         ]
     )
     cubes_to_regrid = unique_cubes(cubes_to_regrid)

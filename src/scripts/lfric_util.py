@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 """Utilities for LFRic output."""
+from pathlib import Path
+from typing import Callable, Sequence, Optional, Union
+
+import iris
+from iris.cube import CubeList
+from iris.experimental.ugrid import PARSE_UGRID_ON_LOAD
 import iris.exceptions
 import iris.coords
 import iris.util
@@ -8,9 +14,6 @@ import numpy as np
 
 from aeolus.io import load_vert_lev
 from aeolus.model import um
-from esmf_regrid.experimental.unstructured_scheme import (
-    MeshToGridESMFRegridder,
-)
 
 
 def add_um_height_coord(cube, field, filename, path_to_levels_file):
@@ -145,6 +148,17 @@ def fix_time_coord(cube, field, filename):
     return cube
 
 
+def load_lfric_raw(
+    fnames: Sequence[Union[Path, str]], callback: Optional[Callable] = None
+) -> CubeList:
+    """Load raw LFRic data."""
+    with PARSE_UGRID_ON_LOAD.context():
+        cl_raw = iris.load(fnames, callback=callback)
+    cl_raw = CubeList(clean_attrs(cube, None, None) for cube in cl_raw)
+    cl_raw = cl_raw.concatenate(check_aux_coords=False)
+    return cl_raw
+
+
 def replace_level_coord_with_height(cube):
     """
     Remove full_ or half_levels coordinate and replace it with level_height.
@@ -225,6 +239,10 @@ def simple_regrid_lfric(
     cube_list, tgt_cube, ref_cube_constr="air_potential_temperature"
 ):
     """Quick&dirty regridding of LFRic data to a common height/lat/lon grid."""
+    from esmf_regrid.experimental.unstructured_scheme import (
+        MeshToGridESMFRegridder,
+    )
+
     # Horizontal regridding
     result_h = iris.cube.CubeList()
     ref_cube = cube_list.extract_cube(ref_cube_constr)
