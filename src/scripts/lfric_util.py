@@ -148,6 +148,13 @@ def fix_time_coord(cube, field, filename):
     return cube
 
 
+def load_lfric_proc(fnames: Sequence[Union[Path, str]]) -> CubeList:
+    """Load post-processed LFRic data."""
+    with iris.FUTURE.context(datum_support=True):
+        dset = iris.load(fnames)
+    return dset
+
+
 def load_lfric_raw(
     fnames: Sequence[Union[Path, str]], callback: Optional[Callable] = None
 ) -> CubeList:
