@@ -13,7 +13,6 @@ from time import time
 # External modules
 from aeolus.io import save_cubelist
 from aeolus.const import init_const
-from aeolus.core import AtmoSim
 from pouch.clim_diag import calc_derived_cubes
 from pouch.log import create_logger
 import iris
@@ -47,14 +46,10 @@ def parse_args(args=None):
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         epilog=f"""Usage:
-./{SCRIPT} -m lfric -i ~/path/to/inp/dir/ -o ~/path/to/out/dir
+./{SCRIPT} -m lfric -i ~/path/to/inp/dir/ [-o ~/path/to/out/dir]
 """,
     )
 
-    ap.add_argument(
-        "-i", "--inpdir", type=str, help="Input directory", required=True
-    )
-    ap.add_argument("-o", "--outdir", type=str, help="Output directory")
     ap.add_argument(
         "-m",
         "--model",
@@ -63,6 +58,10 @@ def parse_args(args=None):
         help="Model",
         choices=["um", "lfric"],
     )
+    ap.add_argument(
+        "-i", "--inpdir", type=str, help="Input directory", required=True
+    )
+    ap.add_argument("-o", "--outdir", type=str, help="Output directory")
     return ap.parse_args(args)
 
 
@@ -91,43 +90,39 @@ def main(args=None):
 
     # Get the input file
     try:
-        fname = sorted(inpdir.glob("*_regr.nc"))[0]  # Assume only 1 file
+        fname = sorted(
+            i for i in inpdir.glob("*.nc") if "_sigma_p" not in i.stem
+        )[
+            0
+        ]  # Assume only 1 file
     except IndexError:
         L.critical("No file found")
 
-    dset = load_proc_data(fname, model=model)
+    dset = load_proc_data(fname)
     if len(dset) == 0:
         L.critical("The file is empty")
         return
     planet = dset[0].attributes["planet"]
-    sim_label = dset[0].attributes["sim_label"]
 
     const = init_const(planet, directory=paths.const)
     calc_derived_cubes(dset, const=const, model=model)
-    atm_sim = AtmoSim(
-        dset,
-        name=sim_label,
-        vert_coord="z",
-        planet=planet,
-        const_dir=paths.const,
-        model=model,
-    )
 
     # Interpolation / relevelling
     dset_interp = iris.cube.CubeList()
-    p_sfc = atm_sim.pres.extract(iris.Constraint(**{dset.model.z: 0}))
-    sigma_p = atm_sim.pres / p_sfc
+    pres = dset.extract_cube(model.pres)
+    p_sfc = pres.extract(iris.Constraint(**{model.z: 0}))
+    sigma_p = pres / p_sfc
     sigma_p.rename(lfric.s)
 
-    for cube in atm_sim.extract(
+    for cube in dset.extract(
         [model.temp, model.u, model.v, model.w, model.pres, model.dens]
-    )._cubes:
+    ):
         dset_interp.append(
             stratify.relevel(
                 cube,
                 sigma_p,
                 SIGMA_LEVELS,
-                axis=dset.model.z,
+                axis=model.z,
                 interpolator=INTERPOLATOR,
             )
         )

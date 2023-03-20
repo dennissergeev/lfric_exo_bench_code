@@ -4,9 +4,14 @@
 # Standard library
 from pathlib import Path
 from typing import Sequence, Union
+import math
+from typing import Optional
+
 
 # External modules
 from aeolus.model import um
+from aeolus.plot import unit_format
+
 import iris
 from iris.cube import CubeList
 
@@ -57,20 +62,6 @@ TF_CASES = {
         "kw_plt": {"color": "C2"},
         "timestep": 1800,
     },
-    # "tle_dlayer_off": {
-    #     "title": "Tidally Locked Earth dlayer OFF",
-    #     "short_title": "TLE dlayer OFF",
-    #     "planet": "tle",
-    #     "kw_plt": {"color": "C2"},
-    #     "timestep": 1800,
-    # },
-    # "tle_dl_type_standard": {
-    #     "title": "Tidally Locked Earth dl_type standard",
-    #     "short_title": "TLE dlayer OFF",
-    #     "planet": "tle",
-    #     "kw_plt": {"color": "C2"},
-    #     "timestep": 1800,
-    # },
 }
 
 
@@ -79,3 +70,31 @@ def load_proc_data(fnames: Sequence[Union[Path, str]]) -> CubeList:
     with iris.FUTURE.context(datum_support=True):
         dset = iris.load(fnames)
     return dset
+
+
+def cube_minmeanmax_nonweighted_str(
+    cube: iris.cube.Cube,
+    sep: Optional[str] = " | ",
+    eq_sign: Optional[str] = "=",
+    fmt: Optional[str] = "auto",
+    **kw_unit_format,
+):
+    """Return min, mean and max of an iris cube as a string."""
+    # Compute the stats
+    _min = float(cube.data.min())
+    _mean = float(cube.data.mean())
+    _max = float(cube.data.max())
+    # Assemble a string
+    txts = []
+    for label, num in zip(["min", "mean", "max"], [_min, _mean, _max]):
+        if fmt == "auto":
+            if (math.log10(abs(_mean)) < 0) or (math.log10(abs(_mean)) > 5):
+                _str = f"{label}{eq_sign}{num:.0e}"
+            else:
+                _str = f"{label}{eq_sign}{round(num):.0f}"
+        elif fmt == "pretty":
+            _str = f"{label}{eq_sign}{unit_format(num, **kw_unit_format)}"
+        else:
+            _str = f"{label}{eq_sign}{num:{fmt}}"
+        txts.append(_str)
+    return sep.join(txts)
