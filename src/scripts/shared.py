@@ -1,19 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Objects used by many scripts in the lfric_exo_bench project."""
-# Standard library
-from pathlib import Path
-from typing import Sequence, Union
-import math
-from typing import Optional
-
-
 # External modules
+from aeolus.io import load_data
 from aeolus.model import um
-from aeolus.plot import unit_format
-
-import iris
-from iris.cube import CubeList
 
 # Local modules
 import paths
@@ -24,6 +14,13 @@ MODELS = {
     "um": {
         "model": um,
         "results_path": paths.results_proc_um,
+        "get_files": lambda sim_label: load_data(
+            sorted(
+                (paths.results_proc_um / f"{sim_label}_ga9").glob(
+                    f"{sim_label}*.nc"
+                )
+            )
+        ),
         "title": "UM",
         "kw_plt": {
             "linestyle": "--",
@@ -34,6 +31,13 @@ MODELS = {
     "lfric": {
         "model": lfric,
         "results_path": paths.results_proc_lfric,
+        "get_files": lambda sim_label: load_data(
+            sorted(
+                (paths.results_proc_lfric / sim_label).glob(
+                    f"{sim_label}*_regr.nc"
+                )
+            )
+        ),
         "title": "LFRic",
         "kw_plt": {"linestyle": "-", "linewidth": 1.25},
     },
@@ -47,6 +51,7 @@ TF_CASES = {
         "planet": "earth",
         "kw_plt": {"color": "C0"},
         "timestep": 1800,
+        "time_mean_period": 1000,
     },
     "el": {
         "title": "Earth-like",
@@ -54,6 +59,7 @@ TF_CASES = {
         "planet": "earth",
         "kw_plt": {"color": "C1"},
         "timestep": 1800,
+        "time_mean_period": 1000,
     },
     "tle": {
         "title": "Tidally Locked Earth",
@@ -61,40 +67,41 @@ TF_CASES = {
         "planet": "tle",
         "kw_plt": {"color": "C2"},
         "timestep": 1800,
+        "time_mean_period": 1000,
     },
 }
 
-
-def load_proc_data(fnames: Sequence[Union[Path, str]]) -> CubeList:
-    """Load post-processed data."""
-    with iris.FUTURE.context(datum_support=True):
-        dset = iris.load(fnames)
-    return dset
-
-
-def cube_minmeanmax_nonweighted_str(
-    cube: iris.cube.Cube,
-    sep: Optional[str] = " | ",
-    eq_sign: Optional[str] = "=",
-    fmt: Optional[str] = "auto",
-    **kw_unit_format,
-):
-    """Return min, mean and max of an iris cube as a string."""
-    # Compute the stats
-    _min = float(cube.data.min())
-    _mean = float(cube.data.mean())
-    _max = float(cube.data.max())
-    # Assemble a string
-    txts = []
-    for label, num in zip(["min", "mean", "max"], [_min, _mean, _max]):
-        if fmt == "auto":
-            if (math.log10(abs(_mean)) < 0) or (math.log10(abs(_mean)) > 5):
-                _str = f"{label}{eq_sign}{num:.0e}"
-            else:
-                _str = f"{label}{eq_sign}{round(num):.0f}"
-        elif fmt == "pretty":
-            _str = f"{label}{eq_sign}{unit_format(num, **kw_unit_format)}"
-        else:
-            _str = f"{label}{eq_sign}{num:{fmt}}"
-        txts.append(_str)
-    return sep.join(txts)
+THAI_CASES = {
+    "thai_ben1": {
+        "title": "Ben 1",
+        "short_title": "Ben1",
+        "planet": "ben1",
+        "kw_plt": {"color": "C0"},
+        "timestep": 1200,
+        "time_mean_period": 610,
+    },
+    "thai_ben2": {
+        "title": "Ben 2",
+        "short_title": "Ben2",
+        "planet": "ben2",
+        "kw_plt": {"color": "C1"},
+        "timestep": 1200,
+        "time_mean_period": 610,
+    },
+    "thai_hab1": {
+        "title": "Hab 1",
+        "short_title": "Hab1",
+        "planet": "hab1",
+        "kw_plt": {"color": "C2"},
+        "timestep": 1200,
+        "time_mean_period": 610,
+    },
+    "thai_hab2": {
+        "title": "Hab 2",
+        "short_title": "Hab2",
+        "planet": "hab2",
+        "kw_plt": {"color": "C3"},
+        "timestep": 1200,
+        "time_mean_period": 610,
+    },
+}

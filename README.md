@@ -1,8 +1,8 @@
 <h1 align="center">
-LFRic simulations of idealised 3D atmospheric flows on terrestrial planets
+Simulations of idealised 3D atmospheric flows on terrestrial planets using LFRic-Atmosphere
 </h1>
 <h4 align="center">
- Code and figures for the paper
+Code and figures for the paper
 </h4>
 
 <p align="center">
@@ -12,8 +12,8 @@ LFRic simulations of idealised 3D atmospheric flows on terrestrial planets
 
 <p align="center">
 <a href="https://www.python.org/downloads/">
-<img src="https://img.shields.io/badge/python-3.10-blue.svg"
-     alt="Python 3.10"></a>
+<img src="https://img.shields.io/badge/python-3.11-blue.svg"
+     alt="Python 3.11"></a>
 <a href="https://github.com/psf/black">
 <img src="https://img.shields.io/badge/code%20style-black-000000.svg"
      alt="black"></a>
