@@ -24,7 +24,7 @@ SCRIPT = Path(__file__).name
 DEFAULT_REGEX = r"{1}[0]{6}(?P<timestamp>[0-9]{2,6})_00"
 
 GLM_MODEL_TIMESTEP = 1200
-GLM_RUNID = "atmosa"
+GLM_RUNID = "umglaa"
 GLM_START_DAY = 0
 
 
@@ -204,7 +204,7 @@ def main(args=None):
     day_str = f"days{days[0]}"
     if len(days) > 1:
         day_str += f"_{days[-1]}"
-    fname_out = outdir / f"{label}_{time_prof}_{day_str}.nc"
+    fname_out = outdir / f"{label}_{time_prof}_{day_str}_regr.nc"
     save_cubelist(cl_proc, fname_out, **gl_attrs)
     L.success(f"Saved to {fname_out}")
     L.info(f"Execution time: {time() - t0:.1f}s")

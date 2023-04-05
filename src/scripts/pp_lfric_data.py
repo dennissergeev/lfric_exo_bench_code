@@ -135,11 +135,13 @@ def main(args=None):
             "lw_down_surf",
             "lw_up_surf",
             "lw_up_toa",
+            "lw_up_clear_toa_rts",
             "pressure_in_wth",
             "sw_direct_toa",
             "sw_down_surf",
             "sw_up_surf",
             "sw_up_toa",
+            "sw_up_clear_toa_rts",
             "temperature",
             "theta",
             "tot_col_int_energy",
@@ -182,7 +184,7 @@ def main(args=None):
     day_str = f"days{days[0]}"
     if len(days) > 1:
         day_str += f"_{days[-1]}"
-    fname_out = outdir / f"{label}_{time_prof}_{day_str}.nc"
+    fname_out = outdir / f"{label}_{time_prof}_{day_str}_regr.nc"
     save_cubelist(cl_proc, fname_out, **gl_attrs)
     L.success(f"Saved to {fname_out}")
     L.info(f"Execution time: {time() - t0:.1f}s")
