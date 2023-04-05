@@ -134,7 +134,6 @@ def fix_time_coord(cube, field, filename):
 
     # Else, fix metadata in variables
     else:
-
         tcoord = cube.coord("time")
 
         # If only 1 time coordinate value, downgrade AuxCoord to Scalar
@@ -146,13 +145,6 @@ def fix_time_coord(cube, field, filename):
                 iris.util.promote_aux_coord_to_dim_coord(cube, tcoord)
 
     return cube
-
-
-def load_lfric_proc(fnames: Sequence[Union[Path, str]]) -> CubeList:
-    """Load post-processed LFRic data."""
-    with iris.FUTURE.context(datum_support=True):
-        dset = iris.load(fnames)
-    return dset
 
 
 def load_lfric_raw(
