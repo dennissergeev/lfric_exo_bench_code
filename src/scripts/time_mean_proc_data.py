@@ -11,7 +11,7 @@ from aeolus.io import load_data, save_cubelist
 from tqdm import tqdm
 
 # Local modules
-from paths import data_final
+import paths
 from shared import MODELS, TF_CASES, THAI_CASES
 
 # Ignore warnings about time coordinate bounds
@@ -50,7 +50,7 @@ for model_key, model_prop in tqdm(MODELS.items()):
                 )
             )
         # Define and create a new data directory
-        outdir = data_final / model_key / sim_label
+        outdir = paths.data_final / model_key / sim_label
         outdir.mkdir(parents=True, exist_ok=True)
         fname_out = (
             outdir
