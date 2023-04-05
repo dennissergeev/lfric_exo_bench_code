@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 """Objects used by many scripts in the lfric_exo_bench project."""
 # External modules
-from aeolus.model import um
+from aeolus.model import lfric, um
 
 # Local modules
 import paths
-from lfric_model import lfric
 
 
 MODELS = {

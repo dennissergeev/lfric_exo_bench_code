@@ -16,12 +16,12 @@ import iris
 from aeolus.const import add_planet_conf_to_cubes, init_const
 from aeolus.coord import get_cube_rel_days
 from aeolus.io import save_cubelist
+from aeolus.model import lfric
 from aeolus.subset import DimConstr, unique_cubes
 import paths
 
 from pouch.log import create_logger
 
-from lfric_model import lfric
 from lfric_util import (
     add_equally_spaced_height_coord,
     add_um_height_coord,

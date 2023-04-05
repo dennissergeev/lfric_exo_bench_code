@@ -8,11 +8,10 @@ from functools import partial
 from pathlib import Path
 from time import time
 
-# import warnings
-
 # External modules
-from aeolus.io import save_cubelist
 from aeolus.const import init_const
+from aeolus.io import save_cubelist
+from aeolus.model import lfric
 from pouch.clim_diag import calc_derived_cubes
 from pouch.log import create_logger
 import iris
@@ -20,7 +19,6 @@ from iris.experimental import stratify
 import numpy as np
 
 # Local modules
-from lfric_model import lfric
 import paths
 from shared import MODELS, load_proc_data
 

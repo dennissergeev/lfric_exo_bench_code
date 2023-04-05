@@ -13,7 +13,7 @@ import iris.util
 import numpy as np
 
 from aeolus.io import load_vert_lev
-from aeolus.model import um
+from aeolus.model import lfric
 
 
 def add_um_height_coord(cube, field, filename, path_to_levels_file):
@@ -271,7 +271,7 @@ def simple_regrid_lfric(
     return result_v
 
 
-def ugrid_spatial(cube, aggr, model=um):
+def ugrid_spatial(cube, aggr, model=lfric):
     cube_copy = cube.copy()
     tmp_coord = iris.coords.AuxCoord(
         points=np.arange(cube.coord(model.x).shape[0]),
@@ -290,5 +290,5 @@ def ugrid_spatial(cube, aggr, model=um):
     return cube_aggr
 
 
-def ugrid_spatial_mean(cube, model=um):
+def ugrid_spatial_mean(cube, model=lfric):
     return ugrid_spatial(cube, "mean", model=model)
