@@ -21,7 +21,7 @@ figures = src / "figures"
 const = scripts / "const"
 
 # Absolute path to the `src/data` folder (contains datasets)
-# data = src / "data"
+data_final = src / "data"
 data = root.parent / "data"
 
 # UM output

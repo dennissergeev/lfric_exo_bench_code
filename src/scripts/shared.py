@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """Objects used by many scripts in the lfric_exo_bench project."""
 # External modules
-from aeolus.io import load_data
 from aeolus.model import um
 
 # Local modules
@@ -14,13 +13,6 @@ MODELS = {
     "um": {
         "model": um,
         "results_path": paths.results_proc_um,
-        "get_files": lambda sim_label: load_data(
-            sorted(
-                (paths.results_proc_um / f"{sim_label}_ga9").glob(
-                    f"{sim_label}*.nc"
-                )
-            )
-        ),
         "title": "UM",
         "kw_plt": {
             "linestyle": "--",
@@ -31,14 +23,7 @@ MODELS = {
     "lfric": {
         "model": lfric,
         "results_path": paths.results_proc_lfric,
-        "get_files": lambda sim_label: load_data(
-            sorted(
-                (paths.results_proc_lfric / sim_label).glob(
-                    f"{sim_label}*_regr.nc"
-                )
-            )
-        ),
-        "title": "LFRic",
+        "title": "LFRic-Atmosphere",
         "kw_plt": {"linestyle": "-", "linewidth": 1.25},
     },
 }
@@ -52,6 +37,7 @@ TF_CASES = {
         "kw_plt": {"color": "C0"},
         "timestep": 1800,
         "time_mean_period": 1000,
+        "proc_fname_suffix": "sigma_p",
     },
     "el": {
         "title": "Earth-like",
@@ -60,6 +46,7 @@ TF_CASES = {
         "kw_plt": {"color": "C1"},
         "timestep": 1800,
         "time_mean_period": 1000,
+        "proc_fname_suffix": "sigma_p",
     },
     "tle": {
         "title": "Tidally Locked Earth",
@@ -68,6 +55,7 @@ TF_CASES = {
         "kw_plt": {"color": "C2"},
         "timestep": 1800,
         "time_mean_period": 1000,
+        "proc_fname_suffix": "sigma_p",
     },
 }
 
@@ -79,6 +67,7 @@ THAI_CASES = {
         "kw_plt": {"color": "C0"},
         "timestep": 1200,
         "time_mean_period": 610,
+        "proc_fname_suffix": "regr",
     },
     "thai_ben2": {
         "title": "Ben 2",
@@ -87,6 +76,7 @@ THAI_CASES = {
         "kw_plt": {"color": "C1"},
         "timestep": 1200,
         "time_mean_period": 610,
+        "proc_fname_suffix": "regr",
     },
     "thai_hab1": {
         "title": "Hab 1",
@@ -95,6 +85,7 @@ THAI_CASES = {
         "kw_plt": {"color": "C2"},
         "timestep": 1200,
         "time_mean_period": 610,
+        "proc_fname_suffix": "regr",
     },
     "thai_hab2": {
         "title": "Hab 2",
@@ -103,5 +94,6 @@ THAI_CASES = {
         "kw_plt": {"color": "C3"},
         "timestep": 1200,
         "time_mean_period": 610,
+        "proc_fname_suffix": "regr",
     },
 }
