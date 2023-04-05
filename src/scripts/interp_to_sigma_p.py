@@ -10,7 +10,7 @@ from time import time
 
 # External modules
 from aeolus.const import init_const
-from aeolus.io import save_cubelist
+from aeolus.io import load_data, save_cubelist
 from aeolus.model import lfric
 from pouch.clim_diag import calc_derived_cubes
 from pouch.log import create_logger
@@ -20,7 +20,7 @@ import numpy as np
 
 # Local modules
 import paths
-from shared import MODELS, load_proc_data
+from shared import MODELS
 
 # Global definitions and styles
 # Self name
@@ -96,7 +96,7 @@ def main(args=None):
     except IndexError:
         L.critical("No file found")
 
-    dset = load_proc_data(fname)
+    dset = load_data(fname)
     if len(dset) == 0:
         L.critical("The file is empty")
         return
