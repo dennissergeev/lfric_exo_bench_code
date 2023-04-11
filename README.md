@@ -95,3 +95,18 @@ System information and key python libraries
           stratify : 0.2.post0
 --------------------------------------------------------------------------------
 ```
+
+<h2 align="center">
+How to cite this repository
+</h2>
+
+    @software{denis_sergeev_2023_7818107,
+      author       = {Denis Sergeev},
+      title        = {dennissergeev/lfric\_exo\_bench\_code: Version 0},
+      month        = apr,
+      year         = 2023,
+      publisher    = {Zenodo},
+      version      = {v0},
+      doi          = {10.5281/zenodo.7818107},
+      url          = {https://doi.org/10.5281/zenodo.7818107}
+    }
