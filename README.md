@@ -18,6 +18,10 @@ Simulations of idealised 3D atmospheric flows on terrestrial planets using LFRic
 <a href="LICENSE">
 <img src="https://img.shields.io/badge/license-MIT-green.svg"
      alt="License: MIT"></a>
+<a href="https://zenodo.org/badge/latestdoi/434663522">
+<img src="https://zenodo.org/badge/434663522.svg"
+     alt="DOI"></a>
+</p>
 
 
 <h2 align="center">Repository contents</h2>
