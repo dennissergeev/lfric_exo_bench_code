@@ -1,9 +1,7 @@
 <h1 align="center">
 Simulations of idealised 3D atmospheric flows on terrestrial planets using LFRic-Atmosphere
 </h1>
-<h4 align="center">
-Code and figures for the paper
-</h4>
+<h4 align="center">Submitted to GMD</h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/wip-%20%F0%9F%9A%A7%20under%20review%20%F0%9F%9A%A7-yellow"
@@ -35,9 +33,9 @@ The final regridded and time mean data are in the `src/data/` directory.
 |  4  | [Mean climate in the THAI cases]() | [THAI-Plots.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/THAI-Plots.ipynb) |
 |  5  | [Global mean climate diagnostics table]() | [Tab04-THAI-Global-Diags.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/Tab04-THAI-Global-Diags.ipynb) |
 
-<h2>Instructions to reproduce figures</h2>
+<h2 align="center">How to reproduce figures</h2>
 
-<h3>Set up environment</h3>
+<h3 align="center">Set up environment</h3>
 
 To recreate the required environment for running Python code, follow these steps. (Skip the first two steps if you have Jupyter Lab with `nb_conda_kernels` installed already.)
 
@@ -56,7 +54,7 @@ cd /path/to/downloaded/repository
 mamba env create --file environment.yml
 ```
 
-<h3>Open the code</h3>
+<h3 align="center">Open the code</h3>
 
 1. Start the Jupyter Lab, for example from the command line (from the `base` environment).
 ```bash
@@ -93,4 +91,3 @@ System information and key python libraries
           stratify : 0.2.post0
 --------------------------------------------------------------------------------
 ```
-(provided with the help of [scooby](https://github.com/banesullivan/scooby))
