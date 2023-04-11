@@ -6,7 +6,7 @@ Code and figures for the paper
 </h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/wip-%20%F0%9F%9A%A7%20under%20construction%20%F0%9F%9A%A7-yellow"
+  <img src="https://img.shields.io/badge/wip-%20%F0%9F%9A%A7%20under%20review%20%F0%9F%9A%A7-yellow"
        alt="wip">
 </p>
 
@@ -27,9 +27,13 @@ Code and figures for the paper
 Notebooks and Python scripts are in the [`src/scripts/` directory](src/scripts/), while the figures themselves are in the `src/figures/` directory.
 The final regridded and time mean data are in the `src/data/` directory.
 
-|  #  | Figure | Notebook |
-|:---:|:-------|:---------|
-|  1  | [Conservation diagnostics]() | [Conservation-Diagnostics.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/Conservation-Diagnostics.ipynb) |
+|  #  | Figure or Table | Notebook |
+|:---:|:----------------|:---------|
+|  1  | [3D image of the cubed sphere mesh]() | [Mesh-3D.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/Mesh-3D.ipynb) |
+|  2  | [Conservation diagnostics in the Temperature Forcing cases]() | [Conservation-Diags.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/Conservation-Diags.ipynb) |
+|  3  | [Temperature Forcing climate]() | [External-Forcing-Plots.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/External-Forcing-Plots.ipynb) |
+|  4  | [Mean climate in the THAI cases]() | [THAI-Plots.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/THAI-Plots.ipynb) |
+|  5  | [Global mean climate diagnostics table]() | [Tab04-THAI-Global-Diags.ipynb](https://nbviewer.jupyter.org/github/dennissergeev/lfric_exo_bench_code/blob/main/src/scripts/Tab04-THAI-Global-Diags.ipynb) |
 
 <h2>Instructions to reproduce figures</h2>
 
