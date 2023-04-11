@@ -41,9 +41,9 @@ The final regridded and time mean data are in the `src/data/` directory.
 
 <h3 align="center">Set up environment</h3>
 
-To recreate the required environment for running Python code, follow these steps. (Skip the first two steps if you have Jupyter Lab with `nb_conda_kernels` installed already.)
+To recreate the required environment for running Python code, follow these steps. (Skip the first two steps if you have Jupyter with `nb_conda_kernels` installed already.)
 
-1. Install mamba, e.g. using [mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
+1. Install conda or mamba, e.g. using [mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
 2. Install necessary packages to the `base` environment. Make sure you are installing them from the `conda-forge` channel.
 ```bash
 mamba install -c conda-forge jupyterlab nb_conda_kernels
@@ -64,7 +64,7 @@ mamba env create --file environment.yml
 ```bash
 jupyter lab
 ```
-2. Open noteboks in the `lfric_ana` environment and run them.
+2. Open notebooks within the `lfric_ana` environment start running the code.
 
 
 <h2 align="center">
