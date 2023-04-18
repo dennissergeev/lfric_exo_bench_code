@@ -106,12 +106,11 @@ def clean_attrs(cube, field, filename):
 
     Needed for concatenating cubes.
     """
-    try:
-        cube.attributes.pop("timeStamp")
-        cube.attributes.pop("uuid")
-    except KeyError:
-        pass
-
+    for attr in ["timeStamp", "uuid"]:
+        try:
+            cube.attributes.pop(attr)
+        except KeyError:
+            pass
     return cube
 
 
@@ -148,12 +147,20 @@ def fix_time_coord(cube, field, filename):
 
 
 def load_lfric_raw(
-    fnames: Sequence[Union[Path, str]], callback: Optional[Callable] = None
+    fnames: Sequence[Union[Path, str]],
+    callback: Optional[Callable] = None,
+    drop_coord: Optional[Sequence[str]] = (),
 ) -> CubeList:
     """Load raw LFRic data."""
     with PARSE_UGRID_ON_LOAD.context():
         cl_raw = iris.load(fnames, callback=callback)
     cl_raw = CubeList(clean_attrs(cube, None, None) for cube in cl_raw)
+    for coord in drop_coord:
+        for cube in cl_raw:
+            try:
+                cube.remove_coord(coord)
+            except iris.exceptions.CoordinateNotFoundError:
+                pass
     cl_raw = cl_raw.concatenate(check_aux_coords=False)
     return cl_raw
 

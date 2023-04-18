@@ -11,7 +11,8 @@ import paths
 MODELS = {
     "um": {
         "model": um,
-        "results_path": paths.results_proc_um,
+        "data_proc_path": paths.results_proc_um,
+        "data_raw_path": paths.results_raw_um,
         "title": "UM",
         "kw_plt": {
             "linestyle": "--",
@@ -21,7 +22,8 @@ MODELS = {
     },
     "lfric": {
         "model": lfric,
-        "results_path": paths.results_proc_lfric,
+        "data_proc_path": paths.results_proc_lfric,
+        "data_raw_path": paths.results_raw_lfric,
         "title": "LFRic-Atmosphere",
         "kw_plt": {"linestyle": "-", "linewidth": 1.25},
     },
@@ -49,7 +51,7 @@ TF_CASES = {
     },
     "tle": {
         "title": "Tidally Locked Earth",
-        "short_ztitle": "TLE",
+        "short_title": "TLE",
         "planet": "tle",
         "kw_plt": {"color": "C2"},
         "timestep": 1800,
