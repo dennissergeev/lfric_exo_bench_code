@@ -68,6 +68,12 @@ def parse_args(args=None):
         default="uniform",
         help="Type of the vertical level height coordinate",
     )
+    ap.add_argument(
+        "--model_top",
+        type=float,
+        default="uniform",
+        help="If level_height=uniform,set the model top height.",
+    )
     return ap.parse_args(args)
 
 
@@ -89,7 +95,7 @@ def main(args=None):
     # Height coordinate
     if args.level_height == "uniform":
         add_levs = partial(
-            add_equally_spaced_height_coord, model_top_height=32_000
+            add_equally_spaced_height_coord, model_top_height=args.model_top
         )
     elif args.level_height == "um_L38_29t_9s_40km":
         add_levs = partial(
@@ -119,7 +125,11 @@ def main(args=None):
         return
     L.info(f"fnames({len(fnames)}) = {fnames[0]} ... {fnames[-1]}")
 
-    cl_raw = load_lfric_raw(fnames, callback=add_levs)
+    cl_raw = load_lfric_raw(
+        fnames,
+        callback=add_levs,
+        drop_coord=["forecast_reference_time"],
+    )
     if len(cl_raw) == 0:
         L.critical("Files are empty!")
         return

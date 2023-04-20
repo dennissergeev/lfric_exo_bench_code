@@ -89,13 +89,16 @@ def main(args=None):
     # Get the input file
     try:
         fname = sorted(
-            i for i in inpdir.glob("*.nc") if "_sigma_p" not in i.stem
+            i
+            for i in inpdir.glob("*.nc")
+            if ("_sigma_p" not in i.stem) and ("conservation" not in i.stem)
         )[
             0
         ]  # Assume only 1 file
     except IndexError:
         L.critical("No file found")
 
+    L.info(f"{fname=}")
     dset = load_data(fname)
     if len(dset) == 0:
         L.critical("The file is empty")
