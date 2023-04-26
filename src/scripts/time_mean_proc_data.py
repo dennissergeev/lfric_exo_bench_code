@@ -33,13 +33,15 @@ SIM_CASES = {**TF_CASES, **THAI_CASES}
 
 # Loop over models (UM, LFRic)
 for model_key, model_prop in tqdm(MODELS.items()):
+    if model_key != "lfric":
+        continue
     model = model_prop["model"]
 
     # Loop over experiments
     for sim_label, sim_prop in tqdm(SIM_CASES.items(), leave=False):
         fname_mask = f"{sim_label}*{sim_prop['proc_fname_suffix']}.nc"
         dset = load_data(
-            sorted((model_prop["results_path"] / sim_label).glob(fname_mask))
+            sorted((model_prop["data_proc_path"] / sim_label).glob(fname_mask))
         )
         # Average each cube in time and append them to a new cube list
         dset_tm = iris.cube.CubeList()

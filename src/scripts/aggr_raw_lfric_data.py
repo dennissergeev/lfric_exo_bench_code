@@ -20,9 +20,9 @@ from aeolus.model import lfric
 from aeolus.subset import DimConstr, unique_cubes
 import paths
 
-from pouch.log import create_logger
+from aeolus.log import create_logger
 
-from lfric_util import (
+from aeolus.lfric import (
     add_equally_spaced_height_coord,
     add_um_height_coord,
     load_lfric_raw,

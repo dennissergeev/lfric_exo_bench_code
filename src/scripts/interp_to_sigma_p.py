@@ -12,8 +12,8 @@ from time import time
 from aeolus.const import init_const
 from aeolus.io import load_data, save_cubelist
 from aeolus.model import lfric
-from pouch.clim_diag import calc_derived_cubes
-from pouch.log import create_logger
+from aeolus.calc import calc_derived_cubes
+from aeolus.log import create_logger
 import iris
 from iris.experimental import stratify
 import numpy as np

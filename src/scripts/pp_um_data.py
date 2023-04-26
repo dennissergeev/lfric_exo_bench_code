@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Process global UM output by interpolating selected fields to common grid."""
-
-# Commonly used standard library tools
+# Standard library
 import argparse
 from pathlib import Path
 from time import time
 import warnings
 
-# My packages and local scripts
+# External libraries
 from aeolus.const import add_planet_conf_to_cubes, init_const
 from aeolus.coord import get_cube_rel_days
-from aeolus.io import load_data, save_cubelist
+from aeolus.io import load_data, save_cubelist, get_filename_list
 from aeolus.model import um
-import paths
+from aeolus.log import create_logger
+from aeolus.proc_um_output import process_cubes
 
-from pouch.log import create_logger
-from pouch.proc_um_output import get_filename_list, process_cubes
+# Local modules
+import paths
 
 # Global definitions and styles
 warnings.filterwarnings("ignore")
@@ -24,7 +24,9 @@ SCRIPT = Path(__file__).name
 DEFAULT_REGEX = r"{1}[0]{6}(?P<timestamp>[0-9]{2,6})_00"
 
 GLM_MODEL_TIMESTEP = 1200
-GLM_RUNID = "umglaa"
+GLM_RUNID = "atmosa"
+# GLM_RUNID = r"[atmosa,umglaa]"
+# GLM_RUNID = "umglaa"
 GLM_START_DAY = 0
 
 

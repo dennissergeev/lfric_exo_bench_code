@@ -1,29 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Process LFRic output by interpolating selected fields to a common grid."""
-
-# Commonly used standard library tools
+# Standard library
 import argparse
 from functools import partial
 from pathlib import Path
 from time import time
 import warnings
 
-# My packages and local scripts
+# External libraries
 from aeolus.const import add_planet_conf_to_cubes, init_const
 from aeolus.coord import get_cube_rel_days
 from aeolus.io import save_cubelist, create_dummy_cube
 from aeolus.subset import unique_cubes
-import paths
-
-from pouch.log import create_logger
-
-from lfric_util import (
+from aeolus.log import create_logger
+from aeolus.lfric import (
     add_equally_spaced_height_coord,
     add_um_height_coord,
     load_lfric_raw,
     simple_regrid_lfric,
 )
+
+# Local modules
+import paths
 
 # Global definitions and styles
 warnings.filterwarnings("ignore")
