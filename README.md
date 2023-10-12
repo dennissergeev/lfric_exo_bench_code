@@ -1,3 +1,8 @@
+<p align="center">
+<img src="https://gmd.copernicus.org/articles/16/5601/2023/gmd-16-5601-2023-avatar-web.png"
+     alt="cover image"></a>
+</p>
+
 <h1 align="center">
 Simulations of idealised 3D atmospheric flows on terrestrial planets using LFRic-Atmosphere
 </h1>
